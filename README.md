@@ -2,6 +2,16 @@
 
 Plataforma acadêmica de economia circular para registrar necessidades de equipamentos de tecnologia e intenções de doação à Escola Municipal Francisco Costa, em Miguel Pereira (RJ). A interface existente foi conectada a uma API Node.js.
 
+## Contexto e motivação
+
+Equipamentos de informática ainda úteis podem ficar sem uso enquanto escolas e comunidades precisam de recursos tecnológicos para apoiar atividades pedagógicas. O ReConecta TI foi idealizado para aproximar esses dois lados: a escola pode apresentar necessidades de equipamentos, e pessoas ou organizações podem registrar intenções de doação e acompanhar o encaminhamento.
+
+A proposta também incentiva o reaproveitamento responsável de equipamentos, prolongando sua vida útil e contribuindo para a economia circular. A plataforma é um meio de facilitar a comunicação e organizar informações; ela não substitui a avaliação da escola nem garante que uma doação será aceita ou realizada.
+
+## Projeto acadêmico e extensionista
+
+O ReConecta TI foi desenvolvido para a disciplina de **Atividades Extensionistas** do curso de **Análise e Desenvolvimento de Sistemas** da **UNINTER**. O projeto aplica conhecimentos de desenvolvimento de software em uma iniciativa com finalidade educacional e social, voltada a facilitar a conexão entre a comunidade e a Escola Municipal Francisco Costa, em Miguel Pereira (RJ).
+
 **Dados de demonstração:** as necessidades e intenções adicionadas pelo seed são exemplos para apresentar o sistema. Não representam inventário ou informações oficiais da escola.
 
 ## Tecnologias
