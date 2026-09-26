@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -58,6 +58,20 @@ const schema = z
   });
 
 type FormValues = z.infer<typeof schema>;
+
+function formatPhone(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length === 0) return "";
+  if (digits.length < 3) return digits.length === 2 ? `(${digits})` : `(${digits}`;
+
+  const areaCode = digits.slice(0, 2);
+  const isMobile = digits.length > 10 || digits[2] === "9";
+  const subscriberLength = isMobile ? 5 : 4;
+  const subscriber = digits.slice(2, 2 + subscriberLength);
+  const remainder = digits.slice(2 + subscriberLength);
+
+  return `(${areaCode}) ${subscriber}${remainder ? `-${remainder}` : ""}`;
+}
 
 export const Route = createFileRoute("/doar")({
   validateSearch: (search: Record<string, unknown>): { need?: string } =>
@@ -235,7 +249,22 @@ function DonatePage() {
                 label="Telefone / WhatsApp *"
                 error={form.formState.errors.phone?.message}
               >
-                <Input id="phone" autoComplete="tel" {...form.register("phone")} />
+                <Controller
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="phone"
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      placeholder="(21) 99999-9999"
+                      maxLength={15}
+                      onChange={(event) => field.onChange(formatPhone(event.target.value))}
+                    />
+                  )}
+                />
               </Field>
 
               <div>
