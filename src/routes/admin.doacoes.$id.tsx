@@ -302,7 +302,7 @@ function AdminDonationDetailPage() {
               ) : null}
               {donation.status === "approved" ? (
                 <Button type="button" variant="outline" onClick={() => awaiting.mutate()}>
-                  Combinar entrega
+                  Marcar entrega como combinada
                 </Button>
               ) : null}
               {["approved", "awaiting_delivery"].includes(donation.status) ? (
