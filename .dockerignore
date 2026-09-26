@@ -1,0 +1,17 @@
+.git
+.github
+.idea
+.vscode
+.output
+.wrangler
+node_modules
+backend/node_modules
+backend/dist
+backend/prisma/*.db
+.env
+.env.*
+backend/.env
+backend/.env.*
+!.env.docker.example
+*.log
+coverage

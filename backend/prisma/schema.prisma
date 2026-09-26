@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+}
+
+enum NeedPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum NeedStatus {
+  DRAFT
+  ACTIVE
+  FULFILLED
+  ARCHIVED
+}
+
+enum DonorType {
+  PERSON
+  ORGANIZATION
+}
+
+enum DonationCondition {
+  NEW
+  VERY_GOOD
+  GOOD
+  NEEDS_REPAIR
+  UNKNOWN
+}
+
+enum WorkingStatus {
+  YES
+  PARTIALLY
+  NO
+  UNKNOWN
+}
+
+enum DeliveryPreference {
+  DELIVER
+  PICKUP
+  TALK_FIRST
+}
+
+enum ContactPeriod {
+  MORNING
+  AFTERNOON
+  ANY
+}
+
+enum DonationStatus {
+  PENDING
+  REVIEWING
+  APPROVED
+  AWAITING_DELIVERY
+  COMPLETED
+  REJECTED
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Need {
+  id                      String       @id @default(cuid())
+  name                    String
+  slug                    String       @unique
+  category                String
+  description             String
+  reason                  String
+  requestedQuantity       Int
+  receivedQuantity        Int          @default(0)
+  priority                NeedPriority @default(MEDIUM)
+  status                  NeedStatus   @default(DRAFT)
+  recommendedConditions   String       @default("[]")
+  demoData                Boolean      @default(false)
+  donations               Donation[]
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+
+  @@index([status, category, priority])
+}
+
+model Donor {
+  id          String      @id @default(cuid())
+  name        String
+  type        DonorType
+  companyName String?
+  email       String      @unique
+  phone       String
+  donations   Donation[]
+  createdAt   DateTime    @default(now())
+
+}
+
+model Donation {
+  id                String            @id @default(cuid())
+  protocol          String            @unique
+  needId            String?
+  need              Need?             @relation(fields: [needId], references: [id], onDelete: SetNull)
+  donorId           String
+  donor             Donor             @relation(fields: [donorId], references: [id], onDelete: Restrict)
+  equipment         String
+  category          String
+  quantity          Int
+  brand             String?
+  model             String?
+  approximateYear   String?
+  condition         DonationCondition
+  workingStatus     WorkingStatus
+  notes             String?
+  deliveryPreference DeliveryPreference
+  contactPeriod     ContactPeriod
+  status            DonationStatus    @default(PENDING)
+  internalNotes     String?
+  rejectionReason   String?
+  acceptedQuantity  Int?
+  receivedQuantity  Int?
+  demoData          Boolean           @default(false)
+  history           DonationEvent[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([status, createdAt])
+  @@index([needId])
+}
+
+model DonationEvent {
+  id         String   @id @default(cuid())
+  donationId String
+  donation   Donation @relation(fields: [donationId], references: [id], onDelete: Cascade)
+  label      String
+  note       String?
+  createdAt  DateTime @default(now())
+
+  @@index([donationId, createdAt])
+}
