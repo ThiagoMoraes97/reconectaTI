@@ -567,7 +567,15 @@ function DonatePage() {
             </Button>
 
             {step < 4 ? (
-              <Button type="button" onClick={goNext}>
+              <Button
+                type="button"
+                onClick={(event) => {
+                  // The same button becomes the submit button when step changes to 4.
+                  // Prevent its click's default action from submitting the form during that render.
+                  event.preventDefault();
+                  void goNext();
+                }}
+              >
                 Continuar
                 <ChevronRight className="ml-1 h-4 w-4" aria-hidden="true" />
               </Button>
