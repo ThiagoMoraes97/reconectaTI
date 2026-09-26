@@ -2,6 +2,10 @@
 
 Plataforma acadêmica de economia circular para registrar necessidades de equipamentos de tecnologia e intenções de doação à Escola Municipal Francisco Costa, em Miguel Pereira (RJ). A interface existente foi conectada a uma API Node.js.
 
+## Página inicial
+
+![Página inicial do ReConecta TI, com a apresentação do projeto e a foto da escola](docs/images/hero-reconecta-ti.png)
+
 ## Contexto e motivação
 
 Equipamentos de informática ainda úteis podem ficar sem uso enquanto escolas e comunidades precisam de recursos tecnológicos para apoiar atividades pedagógicas. O ReConecta TI foi idealizado para aproximar esses dois lados: a escola pode apresentar necessidades de equipamentos, e pessoas ou organizações podem registrar intenções de doação e acompanhar o encaminhamento.
