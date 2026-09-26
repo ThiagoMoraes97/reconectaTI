@@ -3,6 +3,7 @@
 .idea
 .vscode
 .output
+.playwright-cli
 .wrangler
 node_modules
 backend/node_modules

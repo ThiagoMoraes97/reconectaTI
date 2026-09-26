@@ -86,18 +86,26 @@ Copy-Item .env.docker.example .env
 Coloque o segredo gerado em `JWT_SECRET` no `.env` e defina uma senha forte, com pelo menos 8 caracteres, em `ADMIN_PASSWORD`. Depois, na raiz do projeto:
 
 ```sh
-docker compose up --build -d
+docker compose --profile local up --build -d
 ```
 
-Acesse <http://localhost:8080>. O proxy encaminha `/api` para a API e as demais rotas para o frontend. O volume Docker `reconecta-data` mantém o SQLite entre reinicializações. Para parar os contêineres, use `docker compose down`; evite `docker compose down -v` se quiser preservar o banco.
+Acesse <http://localhost:8080>. O serviço `gateway-local` do perfil `local` publica a porta no computador; o serviço `gateway` permanece sem publicação de porta, como esperado no Coolify. O proxy encaminha `/api` para a API e as demais rotas para o frontend. O volume Docker `reconecta-data` mantém o SQLite entre reinicializações. Para parar os contêineres, use `docker compose --profile local down`; evite `docker compose down -v` se quiser preservar o banco.
 
-As portas e a origem pública são configuráveis por `APP_PORT`, `APP_BIND_IP` e `APP_ORIGIN` no `.env`. `VITE_API_URL` deve permanecer `/api` quando o proxy incluso estiver em uso.
+No modo local, a porta e o endereço de bind são configuráveis por `APP_PORT` e `APP_BIND_IP`; `APP_ORIGIN` deve corresponder ao endereço acessado pelo navegador. `VITE_API_URL` deve permanecer `/api` quando o proxy incluso estiver em uso.
 
 ## Deploy no Coolify
 
-Crie uma aplicação a partir do repositório usando o modo **Docker Compose** e o arquivo `docker-compose.yml`. Configure as variáveis `JWT_SECRET`, `ADMIN_PASSWORD` e `APP_ORIGIN` no painel do Coolify. Defina `APP_ORIGIN` com a URL HTTPS que será usada no domínio, por exemplo `https://reconecta.exemplo.com`.
+Crie uma aplicação a partir do repositório GitHub usando o modo **Docker Compose**, a raiz do repositório como diretório e `docker-compose.yml` como arquivo Compose. Não ative o perfil `local` no Coolify.
 
-Associe o domínio ao serviço `gateway` na porta interna `80`. O Coolify termina o HTTPS e encaminha o tráfego ao Caddy; o Caddy distribui `/api` à API e o restante ao frontend. O banco fica no volume persistente `reconecta-data`. As imagens do frontend e da API são construídas pelo próprio Compose.
+Configure no painel do Coolify:
+
+- `APP_ORIGIN` com a origem HTTPS pública, sem barra final, por exemplo `https://reconecta.exemplo.com`.
+- `JWT_SECRET` com um segredo aleatório de pelo menos 32 caracteres.
+- `ADMIN_EMAIL` como `admin@reconectati.local`, que é a conta padrão de administrador.
+- `ADMIN_PASSWORD` como segredo do Coolify, com pelo menos 8 caracteres. Não coloque a senha no repositório.
+- Opcionalmente, `ADMIN_NAME` e `JWT_EXPIRES_IN`.
+
+O seed cria ou atualiza essa conta em cada inicialização da API com o `ADMIN_EMAIL` e `ADMIN_PASSWORD` configurados. Para usar a senha desejada, cadastre-a no campo `ADMIN_PASSWORD` das variáveis do Coolify. Mantenha `VITE_API_URL` como `/api` (valor padrão). Associe o domínio ao serviço `gateway`, na porta interna `80`. O Coolify termina o HTTPS e encaminha o tráfego ao Caddy; o Caddy distribui `/api` para a API e as demais rotas para o frontend. A porta não é publicada no host no modo Coolify. O SQLite permanece no volume `reconecta-data`; mantenha esse armazenamento persistente ao recriar a aplicação. As imagens do frontend e da API são construídas pelo próprio Compose.
 
 Build, lint e verificação de tipos:
 
