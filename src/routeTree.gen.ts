@@ -29,6 +29,7 @@ import { Route as AdminDoacoesIdRouteImport } from './routes/admin.doacoes.$id'
 import { Route as AdminNecessidadesIndexRouteImport } from './routes/admin.necessidades.index'
 import { Route as AdminNecessidadesIdRouteImport } from './routes/admin.necessidades.$id'
 import { Route as AdminNecessidadesNovaRouteImport } from './routes/admin.necessidades.nova'
+import { Route as AdminNecessidadesIdIndexRouteImport } from './routes/admin.necessidades.$id.index'
 import { Route as AdminNecessidadesIdEditarRouteImport } from './routes/admin.necessidades.$id.editar'
 
 const IndexRoute = IndexRouteImport.update({
@@ -131,6 +132,12 @@ const AdminNecessidadesNovaRoute = AdminNecessidadesNovaRouteImport.update({
   path: '/admin/necessidades/nova',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminNecessidadesIdIndexRoute =
+  AdminNecessidadesIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AdminNecessidadesIdRoute,
+  } as any)
 const AdminNecessidadesIdEditarRoute =
   AdminNecessidadesIdEditarRouteImport.update({
     id: '/editar',
@@ -160,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/admin/doacoes/': typeof AdminDoacoesIndexRoute
   '/admin/necessidades/': typeof AdminNecessidadesIndexRoute
   '/admin/necessidades/$id/editar': typeof AdminNecessidadesIdEditarRoute
+  '/admin/necessidades/$id/': typeof AdminNecessidadesIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -178,11 +186,11 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/necessidades': typeof NecessidadesIndexRoute
   '/admin/doacoes/$id': typeof AdminDoacoesIdRoute
-  '/admin/necessidades/$id': typeof AdminNecessidadesIdRouteWithChildren
   '/admin/necessidades/nova': typeof AdminNecessidadesNovaRoute
   '/admin/doacoes': typeof AdminDoacoesIndexRoute
   '/admin/necessidades': typeof AdminNecessidadesIndexRoute
   '/admin/necessidades/$id/editar': typeof AdminNecessidadesIdEditarRoute
+  '/admin/necessidades/$id': typeof AdminNecessidadesIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/admin/doacoes/': typeof AdminDoacoesIndexRoute
   '/admin/necessidades/': typeof AdminNecessidadesIndexRoute
   '/admin/necessidades/$id/editar': typeof AdminNecessidadesIdEditarRoute
+  '/admin/necessidades/$id/': typeof AdminNecessidadesIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -232,6 +241,7 @@ export interface FileRouteTypes {
     | '/admin/doacoes/'
     | '/admin/necessidades/'
     | '/admin/necessidades/$id/editar'
+    | '/admin/necessidades/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -250,11 +260,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/necessidades'
     | '/admin/doacoes/$id'
-    | '/admin/necessidades/$id'
     | '/admin/necessidades/nova'
     | '/admin/doacoes'
     | '/admin/necessidades'
     | '/admin/necessidades/$id/editar'
+    | '/admin/necessidades/$id'
   id:
     | '__root__'
     | '/'
@@ -278,6 +288,7 @@ export interface FileRouteTypes {
     | '/admin/doacoes/'
     | '/admin/necessidades/'
     | '/admin/necessidades/$id/editar'
+    | '/admin/necessidades/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -445,6 +456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNecessidadesNovaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/necessidades/$id/': {
+      id: '/admin/necessidades/$id/'
+      path: '/'
+      fullPath: '/admin/necessidades/$id/'
+      preLoaderRoute: typeof AdminNecessidadesIdIndexRouteImport
+      parentRoute: typeof AdminNecessidadesIdRoute
+    }
     '/admin/necessidades/$id/editar': {
       id: '/admin/necessidades/$id/editar'
       path: '/editar'
@@ -457,10 +475,12 @@ declare module '@tanstack/react-router' {
 
 interface AdminNecessidadesIdRouteChildren {
   AdminNecessidadesIdEditarRoute: typeof AdminNecessidadesIdEditarRoute
+  AdminNecessidadesIdIndexRoute: typeof AdminNecessidadesIdIndexRoute
 }
 
 const AdminNecessidadesIdRouteChildren: AdminNecessidadesIdRouteChildren = {
   AdminNecessidadesIdEditarRoute: AdminNecessidadesIdEditarRoute,
+  AdminNecessidadesIdIndexRoute: AdminNecessidadesIdIndexRoute,
 }
 
 const AdminNecessidadesIdRouteWithChildren =
